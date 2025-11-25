@@ -6,7 +6,8 @@ const router = express.Router();
 
 router.use(authenticate);
 
+router.get("/", projectController.getProjects);
+
 router.get("/:projectId/controls", projectController.getProjectControls);
 
 export default router;
-

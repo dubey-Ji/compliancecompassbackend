@@ -588,3 +588,14 @@ export const getProjectControls = async ({
     },
   };
 };
+
+export const getProjects = async ({ organization_id }) => {
+  const projects = await Project.findAll({
+    where: {
+      organization_id,
+    },
+    attributes: ["id", "name"],
+    raw: true,
+  });
+  return projects;
+};

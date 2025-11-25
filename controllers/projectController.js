@@ -48,3 +48,29 @@ export const getProjectControls = asyncHandler(async (req, res) => {
     );
   }
 });
+
+export const getProjects = asyncHandler(async (req, res) => {
+  const organization_id = req.user?.organization_id;
+  logger.info(`User Id: ${req.user?.id}`);
+
+  if (!organization_id) {
+    return errorResponse(res, "Organization ID is required", 400);
+  }
+
+  try {
+    const result = await projectService.getProjects({
+      organization_id,
+    });
+    return successResponse(res, result, "Projects retrieved successfully", 200);
+  } catch (error) {
+    logger.error("Get projects error:", error);
+    if (error.statusCode) {
+      return errorResponse(res, error.message, error.statusCode);
+    }
+    return errorResponse(
+      res,
+      error.message || "Failed to retrieve projects",
+      500
+    );
+  }
+});
