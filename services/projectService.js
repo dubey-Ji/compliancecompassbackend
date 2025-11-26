@@ -164,9 +164,9 @@ export const getProjectControls = async ({
   if (parsedFilters.search) {
     const searchTerm = `%${parsedFilters.search}%`;
     controlWhereClause[Op.or] = [
-      { control_key: { [Op.iLike]: searchTerm } },
-      { title: { [Op.iLike]: searchTerm } },
-      { description: { [Op.iLike]: searchTerm } },
+      { control_key: { [Op.like]: searchTerm } },
+      { title: { [Op.like]: searchTerm } },
+      { description: { [Op.like]: searchTerm } },
     ];
   }
 
