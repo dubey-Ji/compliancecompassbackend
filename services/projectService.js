@@ -599,3 +599,47 @@ export const getProjects = async ({ organization_id }) => {
   });
   return projects;
 };
+
+export const getProjectControlsStats = async ({
+  projectId,
+  organization_id,
+}) => {
+  const projectControls = await ProjectControl.findAll({
+    where: {
+      project_id: projectId,
+    },
+    include: [
+      {
+        model: Control,
+        as: "control",
+        attributes: [
+          "id",
+          "control_key",
+          "title",
+          "category",
+          "severity",
+          "automatable",
+        ],
+      },
+    ],
+  });
+  const stats = {
+    totalControls: projectControls.length,
+    totalControlsAutomated: projectControls.filter(
+      (pc) => pc.control.automatable
+    ).length,
+    totalControlsManual: projectControls.filter((pc) => !pc.control.automatable)
+      .length,
+    totalControlsPassed: projectControls.filter((pc) => pc.status === "passed")
+      .length,
+    totalControlsFailed: projectControls.filter((pc) => pc.status === "failed")
+      .length,
+    totalControlsInProgress: projectControls.filter(
+      (pc) => pc.status === "in_progress"
+    ).length,
+    totalControlsNotStarted: projectControls.filter(
+      (pc) => pc.status === "not_started"
+    ).length,
+  };
+  return stats;
+};

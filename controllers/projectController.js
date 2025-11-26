@@ -74,3 +74,30 @@ export const getProjects = asyncHandler(async (req, res) => {
     );
   }
 });
+
+export const getProjectControlsStats = asyncHandler(async (req, res) => {
+  const { projectId } = req.params;
+  const organization_id = req.user?.organization_id;
+  logger.info(`User Id: ${req.user?.id}`);
+
+  if (!organization_id) {
+    return errorResponse(res, "Organization ID is required", 400);
+  }
+  try {
+    const result = await projectService.getProjectControlsStats({
+      projectId,
+      organization_id,
+    });
+    return successResponse(
+      res,
+      result,
+      "Project controls stats retrieved successfully",
+      200
+    );
+  } catch (error) {
+    logger.error("Get project controls stats error:", error);
+    if (error.statusCode) {
+      return errorResponse(res, error.message, error.statusCode);
+    }
+  }
+});

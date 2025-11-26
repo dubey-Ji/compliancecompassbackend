@@ -10,4 +10,9 @@ router.get("/", projectController.getProjects);
 
 router.get("/:projectId/controls", projectController.getProjectControls);
 
+router.get(
+  "/:projectId/controls/stats",
+  projectController.getProjectControlsStats
+);
+
 export default router;
